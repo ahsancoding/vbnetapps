@@ -1,0 +1,173 @@
+Imports System.Data.Odbc
+Public Class clsStok_titio
+    Private FKd_barang As String
+    Private FKd_divwh As String
+    Private FKd_lokasi As String
+    Private Fstok As Integer
+    Public Property PKd_barang() As String
+        Get
+            Return FKd_barang
+        End Get
+        Set(ByVal value As String)
+            FKd_barang = value
+        End Set
+    End Property
+    Public Property PKd_divwh() As String
+        Get
+            Return FKd_divwh
+        End Get
+        Set(ByVal value As String)
+            FKd_divwh = value
+        End Set
+    End Property
+    Public Property PKd_lokasi() As String
+        Get
+            Return FKd_lokasi
+        End Get
+        Set(ByVal value As String)
+            FKd_lokasi = value
+        End Set
+    End Property
+    Public Property PStok() As Integer
+        Get
+            Return Fstok
+        End Get
+        Set(ByVal value As Integer)
+            Fstok = value
+        End Set
+    End Property
+    Public Function ubah() As Integer
+        bukaConn()
+        Dim xUbah As String
+        Dim X As Integer
+        Dim xMyCmd As OdbcCommand
+
+        xUbah = "UPDATE stok_tito SET stok=? WHERE kd_barang=? and kd_lokasi=? and kd_divwh=?"
+        xMyCmd = New OdbcCommand(xUbah, MyCn)
+
+        xMyCmd.Parameters.AddWithValue("stok", Fstok)
+        xMyCmd.Parameters.AddWithValue("kd_barang", FKd_barang)
+        xMyCmd.Parameters.AddWithValue("kd_lokasi", FKd_lokasi)
+        xMyCmd.Parameters.AddWithValue("kd_divwh", FKd_divwh)
+
+        xMyCmd.Prepare()
+        X = xMyCmd.ExecuteNonQuery()
+        xMyCmd.Dispose()
+        Return X
+
+    End Function
+    Public Function simpan() As Integer
+        bukaConn()
+        Dim xSimpan As String
+        Dim X As Integer
+        Dim myCmd As OdbcCommand
+        xSimpan = "INSERT INTO stok_tito"
+        xSimpan &= "(kd_barang,kd_lokasi,kd_divwh,stok)"
+        xSimpan &= "values (?,?,?,?)"
+        myCmd = New OdbcCommand(xSimpan, MyCn)
+
+        myCmd.Parameters.AddWithValue("kd_barang", FKd_barang)
+        myCmd.Parameters.AddWithValue("kd_lokasi", FKd_lokasi)
+        myCmd.Parameters.AddWithValue("kd_divwh", FKd_divwh)
+        myCmd.Parameters.AddWithValue("stok", Fstok)
+
+        myCmd.Prepare()
+        X = myCmd.ExecuteNonQuery()
+
+        myCmd.Dispose()
+        Return X
+
+    End Function
+    Public Function getStok() As Boolean
+        bukaConn()
+        Dim query As String
+        Dim xmyread As OdbcDataReader
+        Dim xmycmd As OdbcCommand
+
+        query = "SELECT stok FROM stok_tito WHERE kd_barang=? and kd_lokasi=? and kd_divwh=?"
+        xmycmd = New OdbcCommand(query, MyCn)
+        xmycmd.Parameters.AddWithValue("kd_barang", FKd_barang)
+        xmycmd.Parameters.AddWithValue("kd_lokasi", FKd_lokasi)
+        xmycmd.Parameters.AddWithValue("kd_divwh", FKd_divwh)
+        xmyread = xmycmd.ExecuteReader
+        If xmyread.HasRows Then
+            xmyread.Read()
+            Fstok = xmyread.Item("stok").ToString
+            xmyread.Close()
+            Return True
+        Else
+            xmyread.Close()
+            Return False
+        End If
+
+    End Function
+    'MANUAL
+    Public Function simpan_manual() As Integer
+        bukaCon4()
+        Dim xSimpan As String
+        Dim X As Integer
+        Dim myCmd As OdbcCommand
+        xSimpan = "INSERT INTO stok_tito_manual"
+        xSimpan &= "(kd_barang,kd_lokasi,kd_divwh,stok)"
+        xSimpan &= "values (?,?,?,?)"
+        myCmd = New OdbcCommand(xSimpan, MyCn)
+
+        myCmd.Parameters.AddWithValue("kd_barang", FKd_barang)
+        myCmd.Parameters.AddWithValue("kd_lokasi", FKd_lokasi)
+        myCmd.Parameters.AddWithValue("kd_divwh", FKd_divwh)
+        myCmd.Parameters.AddWithValue("stok", Fstok)
+
+        myCmd.Prepare()
+        X = myCmd.ExecuteNonQuery()
+
+        myCmd.Dispose()
+        Return X
+
+    End Function
+    'MANUAL
+    Public Function ubah_manual() As Integer
+        bukaCon4()
+        Dim xUbah As String
+        Dim X As Integer
+        Dim xMyCmd As OdbcCommand
+
+        xUbah = "UPDATE stok_tito_manual SET stok=? WHERE kd_barang=? and kd_lokasi=? and kd_divwh=?"
+        xMyCmd = New OdbcCommand(xUbah, MyCn)
+
+        xMyCmd.Parameters.AddWithValue("stok", Fstok)
+        xMyCmd.Parameters.AddWithValue("kd_barang", FKd_barang)
+        xMyCmd.Parameters.AddWithValue("kd_lokasi", FKd_lokasi)
+        xMyCmd.Parameters.AddWithValue("kd_divwh", FKd_divwh)
+
+        xMyCmd.Prepare()
+        X = xMyCmd.ExecuteNonQuery()
+        xMyCmd.Dispose()
+        Return X
+
+    End Function
+  
+    '  MANUAL
+    Public Function getStok_manual() As Boolean
+        bukaCon4()
+        Dim query As String
+        Dim xmyread As OdbcDataReader
+        Dim xmycmd As OdbcCommand
+
+        query = "SELECT stok FROM stok_tito_manual WHERE kd_barang=? and kd_lokasi=? and kd_divwh=?"
+        xmycmd = New OdbcCommand(query, MyCn)
+        xmycmd.Parameters.AddWithValue("kd_barang", FKd_barang)
+        xmycmd.Parameters.AddWithValue("kd_lokasi", FKd_lokasi)
+        xmycmd.Parameters.AddWithValue("kd_divwh", FKd_divwh)
+        xmyread = xmycmd.ExecuteReader
+        If xmyread.HasRows Then
+            xmyread.Read()
+            Fstok = xmyread.Item("stok").ToString
+            xmyread.Close()
+            Return True
+        Else
+            xmyread.Close()
+            Return False
+        End If
+
+    End Function
+End Class
